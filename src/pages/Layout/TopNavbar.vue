@@ -14,29 +14,27 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </md-button>
-
-        <div class="md-collapse">
-          <md-list>
-            <md-list-item href="#/news" class="dropdown">
-              <i class="material-icons">notifications</i>
-            </md-list-item>
-            <!-- <md-list-item href="#/logout">
-              <i class="material-icons">power_settings_new</i>
-            </md-list-item>-->
-          </md-list>
-        </div>
       </div>
     </div>
   </md-toolbar>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
-    methods: {
-        toggleSidebar() {
-            this.$sidebar.displaySidebar(!this.$sidebar.showSidebar)
-        },
+  computed: {
+    ...mapState({
+      team: state => state.user,
+      created: state => state.challenges.created,
+      role: state => state.authentication.user.role,
+    }),
+  },
+  methods: {
+    toggleSidebar() {
+      this.$sidebar.displaySidebar(!this.$sidebar.showSidebar)
     },
+  },
 }
 </script>
 

@@ -2,7 +2,7 @@
   <footer class="footer">
     <div class="container">
       <div class="copyright text-center">
-        <a></a>
+        <a>For support please contact support</a>
       </div>
     </div>
   </footer>

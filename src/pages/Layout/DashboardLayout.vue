@@ -1,14 +1,9 @@
 <template>
   <div class="wrapper" :class="{ 'nav-open': $sidebar.showSidebar }">
     <side-bar>
-      <mobile-menu slot="content"></mobile-menu>
-      <sidebar-link to="/dashboard">
-        <md-icon>dashboard</md-icon>
-        <p>Dashboard</p>
-      </sidebar-link>
       <sidebar-link to="/user">
         <md-icon>person</md-icon>
-        <p>User Profile</p>
+        <p>Profile</p>
       </sidebar-link>
       <sidebar-link to="/challenges">
         <md-icon>content_paste</md-icon>
@@ -38,14 +33,13 @@
 import TopNavbar from './TopNavbar.vue'
 import ContentFooter from './ContentFooter.vue'
 import DashboardContent from './Content.vue'
-import MobileMenu from '@/pages/Layout/MobileMenu.vue'
+// import MobileMenu from '@/pages/Layout/MobileMenu.vue'
 
 export default {
-    components: {
-        TopNavbar,
-        DashboardContent,
-        ContentFooter,
-        MobileMenu,
-    },
+  components: {
+    TopNavbar,
+    DashboardContent,
+    ContentFooter,
+  },
 }
 </script>

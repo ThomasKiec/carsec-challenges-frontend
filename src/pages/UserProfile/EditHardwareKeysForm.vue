@@ -2,10 +2,9 @@
   <form>
     <md-card>
       <md-card-header :data-background-color="dataBackgroundColor">
-        <h4 class="title">Edit Profile</h4>
-        <p class="category">Complete your profile</p>
+        <h4 class="title">Hardware Keys</h4>
+        <p class="category">Add hardware keys to get access to more challenges</p>
       </md-card-header>
-
       <md-card-content>
         <div class="md-layout">
           <div class="md-layout-item md-small-size-100 md-size-33">
@@ -79,28 +78,27 @@
 
 <script>
 export default {
-    name: 'edit-profile-form',
-    props: {
-        dataBackgroundColor: {
-            type: String,
-            default: '',
-        },
+  name: 'edit-hardware-keys-form',
+  props: {
+    dataBackgroundColor: {
+      type: String,
+      default: '',
     },
-    data() {
-        return {
-            username: null,
-            disabled: null,
-            emailadress: null,
-            lastname: null,
-            firstname: null,
-            address: null,
-            city: null,
-            country: null,
-            code: null,
-            aboutme:
-                "Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo.",
-        }
-    },
+  },
+  data() {
+    return {
+      username: null,
+      disabled: null,
+      emailadress: null,
+      lastname: null,
+      firstname: null,
+      address: null,
+      city: null,
+      country: null,
+      code: null,
+      aboutme: "Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo.",
+    }
+  },
 }
 </script>
 <style></style>
