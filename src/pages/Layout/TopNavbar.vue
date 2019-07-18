@@ -20,16 +20,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-
 export default {
-  computed: {
-    ...mapState({
-      team: state => state.user,
-      created: state => state.challenges.created,
-      role: state => state.authentication.user.role,
-    }),
-  },
   methods: {
     toggleSidebar() {
       this.$sidebar.displaySidebar(!this.$sidebar.showSidebar)

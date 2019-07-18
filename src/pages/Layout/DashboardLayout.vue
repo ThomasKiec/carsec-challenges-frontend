@@ -5,6 +5,10 @@
         <md-icon>person</md-icon>
         <p>Profile</p>
       </sidebar-link>
+      <sidebar-link v-if="role === 'admin'" to="/user-manager">
+        <md-icon>people</md-icon>
+        <p>User Manager</p>
+      </sidebar-link>
       <sidebar-link to="/challenges">
         <md-icon>content_paste</md-icon>
         <p>Challenges</p>
@@ -33,13 +37,18 @@
 import TopNavbar from './TopNavbar.vue'
 import ContentFooter from './ContentFooter.vue'
 import DashboardContent from './Content.vue'
-// import MobileMenu from '@/pages/Layout/MobileMenu.vue'
+import { mapState } from 'vuex'
 
 export default {
   components: {
     TopNavbar,
     DashboardContent,
     ContentFooter,
+  },
+  computed: {
+    ...mapState({
+      role: state => state.authentication.user.role,
+    }),
   },
 }
 </script>

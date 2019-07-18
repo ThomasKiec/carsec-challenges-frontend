@@ -37,58 +37,80 @@
         </form>
       </md-card-content>
     </md-card>
+    <md-dialog-alert
+      :md-active.sync="error.type === 'alert-danger'"
+      md-title="Error occured"
+      :md-content="error.message"
+      @click="reloadPage"
+    ></md-dialog-alert>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .md-card {
-    width: 400px;
-    height: auto;
-    margin: 100px auto;
-    display: block;
+  width: 400px;
+  height: auto;
+  margin: 100px auto;
+  display: block;
 }
 .md-field {
-    width: 300px;
+  width: 300px;
 }
 </style>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
-    name: 'login',
-    props: {
-        dataBackgroundColor: {
-            type: String,
-            default: 'green',
-        },
+  name: 'login',
+  props: {
+    dataBackgroundColor: {
+      type: String,
+      default: 'green',
     },
-    data() {
-        return {
-            email: '',
-            password: '',
-            submitted: false,
-        }
+  },
+  data() {
+    return {
+      email: '',
+      password: '',
+      submitted: false,
+    }
+  },
+  computed: {
+    loggingIn() {
+      return this.$store.state.authentication.status.loggingIn
     },
-    computed: {
-        loggingIn() {
-            return this.$store.state.authentication.status.loggingIn
-        },
+    ...mapState({
+      error: state => state.alert,
+    }),
+  },
+  created() {
+    // reset login status
+    this.$store.dispatch('authentication/logout')
+  },
+  methods: {
+    handleSubmit() {
+      this.submitted = true
+      const { email, password } = this
+      const { dispatch } = this.$store
+      if (email && password) {
+        dispatch('authentication/login', {
+          email,
+          password,
+        })
+      }
     },
-    created() {
-        // reset login status
-        this.$store.dispatch('authentication/logout')
+    async reloadPage() {
+      const { dispatch } = this.$store
+
+      dispatch('alert/clear')
+
+      this.$data.email = ''
+      this.$data.password = ''
+      this.submitted = false
+
+      await this.$nextTick()
     },
-    methods: {
-        handleSubmit() {
-            this.submitted = true
-            const { email, password } = this
-            const { dispatch } = this.$store
-            if (email && password) {
-                dispatch('authentication/login', {
-                    email,
-                    password,
-                })
-            }
-        },
-    },
+  },
 }
 </script>

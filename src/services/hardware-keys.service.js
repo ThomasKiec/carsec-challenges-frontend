@@ -1,4 +1,5 @@
 import { authHeader } from '../helpers/auth-header'
+import { handleResponse } from './middleware/handle-response'
 
 export const hardwareKeysService = {
   createHardwareKeys,
@@ -31,6 +32,15 @@ async function createHardwareKeys(name) {
   return fetch(`${process.env.VUE_APP_API_URL}/hardware-keys`, requestOptions).then(handleResponse)
 }
 
+async function deleteHardwareKey(keyId) {
+  const requestOptions = {
+    method: 'DELETE',
+    headers: authHeader(),
+  }
+
+  return fetch(`${process.env.VUE_APP_API_URL}/hardware-keys/${keyId}`, requestOptions).then(handleResponse)
+}
+
 async function updateUserKeys(keys) {
   const requestOptions = {
     method: 'PUT',
@@ -42,31 +52,4 @@ async function updateUserKeys(keys) {
   }
 
   return fetch(`${process.env.VUE_APP_API_URL}/hardware-keys/user`, requestOptions).then(handleResponse)
-}
-
-async function deleteHardwareKey(keyId) {
-  const requestOptions = {
-    method: 'DELETE',
-    headers: authHeader(),
-  }
-
-  return fetch(`${process.env.VUE_APP_API_URL}/hardware-keys/${keyId}`, requestOptions).then(handleResponse)
-}
-
-function handleResponse(response) {
-  return response.text().then(text => {
-    const data = text && JSON.parse(text)
-    if (!response.ok) {
-      if (response.status === 401) {
-        localStorage.removeItem('user')
-        location.reload(true)
-      }
-
-      const error = (data && data.message) || response.statusText
-
-      return Promise.reject(error)
-    }
-
-    return data
-  })
 }

@@ -5,6 +5,8 @@ import { alert } from './alert.module'
 import { authentication } from './authentication.module'
 import { challenges } from './user-challenges.module'
 import { hardwareKeys } from './hardware-keys.module'
+import { users } from './users.module'
+import { teams } from './teams.module'
 
 Vue.use(Vuex)
 
@@ -14,5 +16,7 @@ export const store = new Vuex.Store({
     authentication,
     challenges,
     hardwareKeys,
+    users,
+    teams,
   },
 })

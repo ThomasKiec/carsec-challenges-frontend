@@ -6,6 +6,7 @@ import UserProfile from '@/pages/UserProfile.vue'
 import News from '@/pages/News.vue'
 import Logout from '@/pages/Logout.vue'
 import ChallengesList from '@/pages/ChallengesList.vue'
+import UserManager from '@/pages/UserManager.vue'
 
 const routes = [
   {
@@ -23,7 +24,11 @@ const routes = [
         name: 'Profile',
         component: UserProfile,
       },
-
+      {
+        path: 'user-manager',
+        name: 'User Manager',
+        component: UserManager,
+      },
       {
         path: 'news',
         name: 'News',
