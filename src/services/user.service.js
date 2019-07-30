@@ -1,5 +1,5 @@
 import { authHeader } from '../helpers/auth-header'
-import { handleResponse } from './middleware/handle-response'
+import { handleJSONResponse } from './middleware/handle-response'
 
 export const userService = {
   createUser,
@@ -7,6 +7,8 @@ export const userService = {
   login,
   logout,
   getUsers,
+  resetPassword,
+  changePassword,
 }
 
 async function getUsers() {
@@ -15,7 +17,7 @@ async function getUsers() {
     headers: authHeader(),
   }
 
-  return fetch(`${process.env.VUE_APP_API_URL}/users`, requestOptions).then(handleResponse)
+  return fetch(`${process.env.VUE_APP_API_URL}/users`, requestOptions).then(handleJSONResponse)
 }
 
 async function createUser(email, teamId, role) {
@@ -32,7 +34,29 @@ async function createUser(email, teamId, role) {
     }),
   }
 
-  return fetch(`${process.env.VUE_APP_API_URL}/users/signup`, requestOptions).then(handleResponse)
+  return fetch(`${process.env.VUE_APP_API_URL}/users/signup`, requestOptions).then(handleJSONResponse)
+}
+
+async function changePassword(password) {
+  const requestOptions = {
+    method: 'PUT',
+    headers: {
+      ...authHeader(),
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ password }),
+  }
+
+  return fetch(`${process.env.VUE_APP_API_URL}/users/`, requestOptions).then(handleJSONResponse)
+}
+
+async function resetPassword(userId) {
+  const requestOptions = {
+    method: 'PUT',
+    headers: authHeader(),
+  }
+
+  return fetch(`${process.env.VUE_APP_API_URL}/users/reset/${userId}`, requestOptions).then(handleJSONResponse)
 }
 
 async function deleteUser(userIds) {
@@ -55,7 +79,7 @@ async function deleteUser(userIds) {
 
   console.log(queryParameters)
 
-  return fetch(`${process.env.VUE_APP_API_URL}/users${queryParameters}`, requestOptions).then(handleResponse)
+  return fetch(`${process.env.VUE_APP_API_URL}/users${queryParameters}`, requestOptions).then(handleJSONResponse)
 }
 
 async function login(email, password) {
@@ -69,7 +93,7 @@ async function login(email, password) {
   }
 
   return fetch(`${process.env.VUE_APP_API_URL}/users/signin`, requestOptions)
-    .then(handleResponse)
+    .then(handleJSONResponse)
     .then(user => {
       // login successful if there's a jwt token in the response
       if (user.token) {

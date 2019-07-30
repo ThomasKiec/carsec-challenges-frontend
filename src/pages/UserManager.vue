@@ -14,13 +14,30 @@
         </md-field>
       </md-table-toolbar>
       <md-table-toolbar slot="md-table-alternate-header" slot-scope="{ count }">
-        <div class="md-toolbar-section-start">{{ getAlternateLabel(count)}}</div>
+        <div class="md-toolbar-section-start">{{ getAlternateLabel(count) }}</div>
         <div class="md-toolbar-section-end">
+          <md-button
+            v-if="selectedLength() === 1"
+            class="md-icon-button md-raised md-info md-just-icon"
+            @click="showDialogDeleteUserKeyValues = true"
+          >
+            <md-icon>autorenew</md-icon>
+            <md-tooltip md-direction="bottom">Reset user key values</md-tooltip>
+          </md-button>
+          <md-button
+            v-if="selectedLength() === 1"
+            class="md-icon-button md-raised md-warning md-just-icon"
+            @click="showDialogResetPassword = true"
+          >
+            <md-icon>clear</md-icon>
+            <md-tooltip md-direction="bottom">Reset user password</md-tooltip>
+          </md-button>
           <md-button
             class="md-icon-button md-raised md-danger md-just-icon"
             @click="showDialogDeleteUser = true"
           >
             <md-icon>delete</md-icon>
+            <md-tooltip md-direction="bottom">Delete users</md-tooltip>
           </md-button>
         </div>
       </md-table-toolbar>
@@ -36,10 +53,10 @@
         md-selectable="multiple"
         md-auto-select
       >
-        <md-table-cell md-label="Id" md-sort-by="id" md-numeric>{{item.id}}</md-table-cell>
-        <md-table-cell md-label="Email" md-sort-by="email">{{item.email}}</md-table-cell>
-        <md-table-cell md-label="Role" md-sort-by="role">{{item.role}}</md-table-cell>
-        <md-table-cell md-label="Team" md-sort-by="team">{{item.team}}</md-table-cell>
+        <md-table-cell md-label="Id" md-sort-by="id" md-numeric>{{ item.id }}</md-table-cell>
+        <md-table-cell md-label="Email" md-sort-by="email">{{ item.email }}</md-table-cell>
+        <md-table-cell md-label="Role" md-sort-by="role">{{ item.role }}</md-table-cell>
+        <md-table-cell md-label="Team" md-sort-by="team">{{ item.team }}</md-table-cell>
       </md-table-row>
     </md-table>
     <md-dialog :md-active.sync="showDialogAddUser">
@@ -59,7 +76,11 @@
           <md-field>
             <label for="teams">Teams</label>
             <md-select v-model="userForm.teamId" name="userForm.teamId" id="userForm.teamId">
-              <md-option v-for="key in teams" v-bind:key="key.id" v-bind:value="key.id">{{key.name}}</md-option>
+              <md-option
+                v-for="key in teams"
+                v-bind:key="key.id"
+                v-bind:value="key.id"
+              >{{ key.name }}</md-option>
             </md-select>
           </md-field>
         </div>
@@ -98,11 +119,11 @@
                   name="teamForm.selected"
                   id="teamForm.selected"
                 >
-                  <md-option
-                    v-for="team in teams"
-                    v-bind:key="team.id"
-                    v-bind:value="team.id"
-                  >{{team.name}}</md-option>
+                  <md-option v-for="team in teams" v-bind:key="team.id" v-bind:value="team.id">
+                    {{
+                    team.name
+                    }}
+                  </md-option>
                 </md-select>
               </md-field>
             </div>
@@ -117,11 +138,39 @@
     <md-dialog-confirm
       :md-active.sync="showDialogDeleteUser"
       md-title="Delete Users"
-      :md-content="'You have selected <strong>' + selected.length + ' user(s) </strong>. <br> Do you really want to delete those?'"
+      :md-content="
+        'You have selected <strong>' + selectedLength() + ' user(s) </strong>. <br> Do you really want to delete those?'
+      "
       md-confirm-text="Delete"
       md-cancel-text="Cancel"
       @md-cancel="closeDialogDeleteUsers"
       @md-confirm="deleteUsers"
+    />
+    <md-dialog-confirm
+      :md-active.sync="showDialogResetPassword"
+      md-title="Reset user password"
+      :md-content="
+        'You have selected user with email: <strong>' +
+          firstSelectedEmail() +
+          '</strong>. <br> Do you really want to reset the password?'
+      "
+      md-confirm-text="Reset"
+      md-cancel-text="Cancel"
+      @md-cancel="closeDialogResetPassword"
+      @md-confirm="resetPassword"
+    />
+    <md-dialog-confirm
+      :md-active.sync="showDialogDeleteUserKeyValues"
+      md-title="Reset user key values"
+      :md-content="
+        'You have selected user with email: <strong>' +
+          firstSelectedEmail() +
+          '</strong>. <br> Do you really want to reset the users hardware key value?'
+      "
+      md-confirm-text="Reset"
+      md-cancel-text="Cancel"
+      @md-cancel="closeDialogDeleteUserKeyValues"
+      @md-confirm="deleteUserKeyValues"
     />
     <md-dialog-alert
       :md-active.sync="userCreated.success"
@@ -133,6 +182,18 @@
       :md-active.sync="userDeleted.success"
       md-title="User deleted"
       md-content="The user has been sucessfully deleted"
+      @click="reloadPage"
+    ></md-dialog-alert>
+    <md-dialog-alert
+      :md-active.sync="passwordReset.success"
+      md-title="Password reset"
+      md-content="The users password has been reset"
+      @click="reloadPage"
+    ></md-dialog-alert>
+    <md-dialog-alert
+      :md-active.sync="userKeyValuesDeleted.success"
+      md-title="User keys delted"
+      md-content="The users hardware key values have been sucessfully deleted"
       @click="reloadPage"
     ></md-dialog-alert>
     <md-dialog-alert
@@ -178,6 +239,8 @@ export default {
       users: state => state.users.items,
       userCreated: state => state.users.created,
       userDeleted: state => state.users.deleted,
+      passwordReset: state => state.users.reset,
+      userKeyValuesDeleted: state => state.userKeys.values.deleted,
       teams: state => state.teams.items,
       teamCreated: state => state.teams.created,
       teamDeleted: state => state.teams.deleted,
@@ -187,6 +250,12 @@ export default {
         }
         if (state.users.deleted.error) {
           return state.users.deleted
+        }
+        if (state.users.reset.error) {
+          return state.teams.reset
+        }
+        if (state.userKeys.values.deleted.error) {
+          return state.userKeys.values.deleted
         }
         if (state.teams.created.error) {
           return state.teams.created
@@ -203,7 +272,7 @@ export default {
     this.$store.dispatch('users/getUsers')
   },
   mounted() {
-    this.$store.subscribe(async (mutation, state) => {
+    this.$store.subscribe(async mutation => {
       switch (mutation.type) {
         case 'users/getUsersSuccess':
           this.searched = this.$store.state.users.items
@@ -217,10 +286,13 @@ export default {
       searched: [],
       selected: [],
       selectedLength: () => this.$data.selected.length,
+      firstSelectedEmail: () => (this.$data.selected[0] ? this.$data.selected[0].email : ''),
       showDialogAddUser: false,
       showDialogDeleteUser: false,
       showDialogAddTeam: false,
       showDialogDeleteTeam: false,
+      showDialogResetPassword: false,
+      showDialogDeleteUserKeyValues: false,
       userForm: {
         email: '',
         teamId: null,
@@ -252,13 +324,26 @@ export default {
       const { dispatch } = this.$store
 
       const userIds = this.$data.selected.map(({ id }) => id)
-      console.log(userIds)
 
       dispatch('users/deleteUser', {
         userIds,
       })
 
       this.reloadPage()
+    },
+    async resetPassword() {
+      const { dispatch } = this.$store
+
+      const [{ id: userId }] = this.$data.selected
+
+      dispatch('users/resetPassword', { userId })
+    },
+    async deleteUserKeyValues() {
+      const { dispatch } = this.$store
+
+      const [{ id: userId }] = this.$data.selected
+
+      dispatch('userKeys/deleteUserKeyValues', { userId })
     },
     async createTeam() {
       const { dispatch } = this.$store
@@ -312,8 +397,17 @@ export default {
       await this.$nextTick()
     },
     async closeDialogDeleteUsers() {
-      this.$data.selected = []
       this.$data.showDialogDeleteUser = false
+
+      await this.$nextTick()
+    },
+    async closeDialogResetPassword() {
+      this.data.showDialogResetPassword = false
+
+      await this.$nextTick()
+    },
+    async closeDialogDeleteUserKeyValues() {
+      this.data.showDialogDeleteUserKeyValues = false
 
       await this.$nextTick()
     },
@@ -328,10 +422,10 @@ export default {
     async reloadPage() {
       this.$store.state.users.created = {}
       this.$store.state.users.deleted = {}
+      this.$store.state.users.reset = {}
       this.$store.state.teams.created = {}
       this.$store.state.teams.deleted = {}
-      this.$data.selected = []
-
+      this.$store.state.userKeys.values.deleted = {}
       this.$store.dispatch('users/getUsers')
       this.$store.dispatch('teams/getTeams')
 
