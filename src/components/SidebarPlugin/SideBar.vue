@@ -1,14 +1,9 @@
 <template>
-  <div
-    class="sidebar"
-    :data-color="activeColor"
-    :data-image="backgroundImage"
-    :style="sidebarStyle"
-  >
+  <div class="sidebar" :data-color="activeColor" :data-image="backgroundImage" :style="sidebarStyle">
     <div class="logo">
       <a href="#" class="simple-text logo-mini">
         <div class="logo-img">
-          <img :src="imgLogo" alt>
+          <img :src="imgLogo" alt />
         </div>
       </a>
       <a target="_blank" class="simple-text logo-normal">{{ title }}</a>
@@ -33,64 +28,57 @@
 import SidebarLink from './SidebarLink.vue'
 
 export default {
-    components: {
-        SidebarLink,
+  components: {
+    SidebarLink,
+  },
+  props: {
+    title: {
+      type: String,
+      default: 'CARSEC',
     },
-    props: {
-        title: {
-            type: String,
-            default: 'CARSEC',
-        },
-        backgroundImage: {
-            type: String,
-            default: require('@/assets/img/sidebar-2.jpg'),
-        },
-        imgLogo: {
-            type: String,
-            default: require('@/assets/img/favicon.png'),
-        },
-        activeColor: {
-            type: String,
-            default: 'green',
-            validator: value => {
-                let acceptedValues = [
-                    '',
-                    'purple',
-                    'blue',
-                    'green',
-                    'orange',
-                    'red',
-                ]
-                return acceptedValues.indexOf(value) !== -1
-            },
-        },
-        sidebarLinks: {
-            type: Array,
-            default: () => [],
-        },
-        autoClose: {
-            type: Boolean,
-            default: true,
-        },
+    backgroundImage: {
+      type: String,
+      default: require('@/assets/img/sidebar-2.jpg'),
     },
-    provide() {
-        return {
-            autoClose: this.autoClose,
-        }
+    imgLogo: {
+      type: String,
+      default: require('@/assets/img/favicon.png'),
     },
-    computed: {
-        sidebarStyle() {
-            return {
-                backgroundImage: `url(${this.backgroundImage})`,
-            }
-        },
+    activeColor: {
+      type: String,
+      default: 'green',
+      validator: value => {
+        let acceptedValues = ['', 'purple', 'blue', 'green', 'orange', 'red']
+        return acceptedValues.indexOf(value) !== -1
+      },
     },
+    sidebarLinks: {
+      type: Array,
+      default: () => [],
+    },
+    autoClose: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  provide() {
+    return {
+      autoClose: this.autoClose,
+    }
+  },
+  computed: {
+    sidebarStyle() {
+      return {
+        backgroundImage: `url(${this.backgroundImage})`,
+      }
+    },
+  },
 }
 </script>
 <style>
 @media screen and (min-width: 991px) {
-    .nav-mobile-menu {
-        display: none;
-    }
+  .nav-mobile-menu {
+    display: none;
+  }
 }
 </style>

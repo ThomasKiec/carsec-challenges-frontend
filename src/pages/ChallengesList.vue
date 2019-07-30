@@ -32,23 +32,18 @@
             <md-field>
               <label>Build Call</label>
               <md-input v-model="challengeForm.buildCall" maxlength="255"></md-input>
-              <span class="md-helper-text">Note: Mark build keys with ('$...$')</span>
+              <span class="md-helper-text"
+                >Note: The hardware keys will be append to the build call in the selected order</span
+              >
             </md-field>
           </div>
           <div class="md-layout-item md-small-size-100 md-size-100">
             <md-field>
               <label for="hardwareKeys">Hardware Keys</label>
-              <md-select
-                v-model="selectedItem"
-                name="selectedItem"
-                id="selectedItem"
-                @md-selected="addSelectedKey"
-              >
-                <md-option
-                  v-for="key in hardwareKeys"
-                  v-bind:key="key.id"
-                  v-bind:value="key.id"
-                >{{key.name}}</md-option>
+              <md-select v-model="selectedItem" name="selectedItem" id="selectedItem" @md-selected="addSelectedKey">
+                <md-option v-for="key in hardwareKeys" v-bind:key="key.id" v-bind:value="key.id">{{
+                  key.name
+                }}</md-option>
               </md-select>
               <span class="md-helper-text">Choose hardware keys for challenge</span>
             </md-field>
@@ -56,15 +51,15 @@
           </div>
           <div></div>
           <div class="md-layout-item md-small-size-100 md-size-100 text-left">
-            <md-button class="md-icon-button md-raised" @click="removeLastKey">
+            <md-button class="md-icon-button md-raised md-round" @click="removeLastKey">
               <md-icon>clear</md-icon>
               <md-tooltip md-direction="bottom">Remove last hardware key</md-tooltip>
             </md-button>
-            <md-button class="md-icon-button md-raised md-danger" @click="clickDeleteHardwareKey">
+            <md-button class="md-icon-button md-raised md-danger md-round" @click="clickDeleteHardwareKey">
               <md-icon>remove</md-icon>
               <md-tooltip md-direction="bottom">Delete hardware key</md-tooltip>
             </md-button>
-            <md-button class="md-icon-button md-raised md-success" @click="clickAddHardwareKey">
+            <md-button class="md-icon-button md-raised md-success md-round" @click="clickAddHardwareKey">
               <md-icon>add</md-icon>
               <md-tooltip md-direction="bottom">Create hardware key</md-tooltip>
             </md-button>
@@ -99,11 +94,9 @@
                     name="hardwareKeyForm.selected"
                     id="hardwareKeyForm.selected"
                   >
-                    <md-option
-                      v-for="key in hardwareKeys"
-                      v-bind:key="key.id"
-                      v-bind:value="key.id"
-                    >{{key.name}}</md-option>
+                    <md-option v-for="key in hardwareKeys" v-bind:key="key.id" v-bind:value="key.id">{{
+                      key.name
+                    }}</md-option>
                   </md-select>
                 </md-field>
               </div>
@@ -133,13 +126,8 @@
       md-title="Hardware key deleted"
       md-content="The hardware key has been successfully deleted."
     />
-    <md-dialog-alert
-      :md-active.sync="error"
-      md-title="Error occured"
-      :md-content="error.message"
-      @click="reloadPage"
-    >
-      <label>{{error.message}}</label>
+    <md-dialog-alert :md-active.sync="error" md-title="Error occured" :md-content="error.message" @click="reloadPage">
+      <label>{{ error.message }}</label>
     </md-dialog-alert>
     <div class="md-layout">
       <div class="md-layout-item md-medium-size-100 md-size-66">
@@ -221,7 +209,7 @@ export default {
       },
       hardwareKeyForm: {
         name: '',
-        selected: undefined,
+        selected: null,
       },
     }
   },
@@ -258,6 +246,7 @@ export default {
       await this.$nextTick()
 
       const { dispatch } = this.$store
+
       console.log(this.$data.challengeForm.selectedKeys.ids)
 
       dispatch('challenges/createChallenge', {
@@ -270,7 +259,7 @@ export default {
         challengeKeys: this.$data.challengeForm.selectedKeys.ids,
       })
 
-      this.$store.dispatch('challenges/getAllChallenges')
+      dispatch('challenges/getAllChallenges')
 
       await this.closeDialogChallenge()
     },
@@ -296,7 +285,6 @@ export default {
       }
       this.reloadPage()
 
-      // await this.$nextTick()
       this.$data.hardwareKeyForm.selected = null
 
       await this.closeDialogHardwareKey()
@@ -324,11 +312,13 @@ export default {
     },
     async reloadPage() {
       this.$store.state.challenges.created = {}
+      this.$store.state.challenges.deleted = {}
       this.$store.state.hardwareKeys.created = {}
       this.$store.state.hardwareKeys.deleted = {}
 
       this.$store.dispatch('hardwareKeys/getHardwareKeys')
       this.$store.dispatch('challenges/getAllChallenges')
+
       await this.$nextTick()
     },
   },

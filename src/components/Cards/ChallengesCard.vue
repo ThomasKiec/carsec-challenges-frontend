@@ -37,7 +37,7 @@
     />
     <md-card>
       <md-card-header :data-background-color="dataBackgroundColor">
-        <h4 class="title">{{challenge.title}}</h4>
+        <h4 class="title">{{ challenge.title }}</h4>
       </md-card-header>
       <md-card-content>
         <div class="md-layout">
@@ -89,11 +89,11 @@
             >Delete</md-button>
             <md-button
               @click="showDialogCreateChallenge = true"
-              v-show="!challenge.solved && (challenge.status === 'completed')"
+              v-show="!challenge.solved && challenge.status === 'completed'"
               class="md-raised md-success"
             >Solve</md-button>
             <md-button
-              v-show="challenge.solved || (challenge.status !== 'completed')"
+              v-show="challenge.solved || challenge.status !== 'completed'"
               class="md-primary md-success"
               disabled
             >Solved</md-button>
@@ -165,11 +165,13 @@ export default {
       const { dispatch } = this.$store
 
       dispatch('challenges/deleteChallenge', { challengeId: this.$props.challenge.id }).then(() => {
-        reloadPage()
+        this.reloadPage()
       })
     },
     downloadChallenge() {
-      console.log('download challenge')
+      const { dispatch } = this.$store
+
+      dispatch('challenges/downloadChallenge', { challengeId: this.$props.challenge.id })
     },
     closeDialog() {
       this.$data.showDialogCreateChallenge = false

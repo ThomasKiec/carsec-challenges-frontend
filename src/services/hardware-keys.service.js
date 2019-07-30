@@ -1,5 +1,5 @@
 import { authHeader } from '../helpers/auth-header'
-import { handleResponse } from './middleware/handle-response'
+import { handleJSONResponse } from './middleware/handle-response'
 
 export const hardwareKeysService = {
   createHardwareKeys,
@@ -15,7 +15,7 @@ async function getHardwareKeys() {
   }
 
   return fetch(`${process.env.VUE_APP_API_URL}/hardware-keys`, requestOptions)
-    .then(handleResponse)
+    .then(handleJSONResponse)
     .then(({ hardwareKeys }) => hardwareKeys)
 }
 
@@ -29,7 +29,7 @@ async function createHardwareKeys(name) {
     body: JSON.stringify({ name }),
   }
 
-  return fetch(`${process.env.VUE_APP_API_URL}/hardware-keys`, requestOptions).then(handleResponse)
+  return fetch(`${process.env.VUE_APP_API_URL}/hardware-keys`, requestOptions).then(handleJSONResponse)
 }
 
 async function deleteHardwareKey(keyId) {
@@ -38,7 +38,7 @@ async function deleteHardwareKey(keyId) {
     headers: authHeader(),
   }
 
-  return fetch(`${process.env.VUE_APP_API_URL}/hardware-keys/${keyId}`, requestOptions).then(handleResponse)
+  return fetch(`${process.env.VUE_APP_API_URL}/hardware-keys/${keyId}`, requestOptions).then(handleJSONResponse)
 }
 
 async function updateUserKeys(keys) {
@@ -51,5 +51,5 @@ async function updateUserKeys(keys) {
     body: JSON.stringify({ keys }),
   }
 
-  return fetch(`${process.env.VUE_APP_API_URL}/hardware-keys/user`, requestOptions).then(handleResponse)
+  return fetch(`${process.env.VUE_APP_API_URL}/hardware-keys/user`, requestOptions).then(handleJSONResponse)
 }

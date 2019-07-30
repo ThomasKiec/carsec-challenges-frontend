@@ -1,10 +1,13 @@
 import { authHeader } from '../helpers/auth-header'
+import { handleJSONResponse, handleDownloadResponse } from './middleware/handle-response'
+import download from 'downloadjs'
 
 export const challengesService = {
   createChallenge,
   deleteChallenge,
   getUserChallenges,
   solveUserChallenge,
+  downloadUserChallenge,
 }
 
 async function getUserChallenges() {
@@ -14,7 +17,7 @@ async function getUserChallenges() {
   }
 
   return fetch(`${process.env.VUE_APP_API_URL}/challenges`, requestOptions)
-    .then(handleResponse)
+    .then(handleJSONResponse)
     .then(({ challenges }) => challenges)
 }
 
@@ -36,7 +39,7 @@ async function createChallenge(project, title, points, topic, buildCall, descrip
     }),
   }
 
-  return fetch(`${process.env.VUE_APP_API_URL}/challenges`, requestOptions).then(handleResponse)
+  return fetch(`${process.env.VUE_APP_API_URL}/challenges`, requestOptions).then(handleJSONResponse)
 }
 
 async function deleteChallenge(id) {
@@ -45,7 +48,7 @@ async function deleteChallenge(id) {
     headers: authHeader(),
   }
 
-  return fetch(`${process.env.VUE_APP_API_URL}/challenges/${id}`, requestOptions).then(handleResponse)
+  return fetch(`${process.env.VUE_APP_API_URL}/challenges/${id}`, requestOptions).then(handleJSONResponse)
 }
 
 async function solveUserChallenge(challengeId, result) {
@@ -55,24 +58,21 @@ async function solveUserChallenge(challengeId, result) {
   }
 
   return fetch(`${process.env.VUE_APP_API_URL}/user-challenge/solve/${challengeId}/${result}`, requestOptions).then(
-    handleResponse
+    handleJSONResponse
   )
 }
 
-function handleResponse(response) {
-  return response.text().then(text => {
-    const data = text && JSON.parse(text)
-    if (!response.ok) {
-      if (response.status === 401) {
-        localStorage.removeItem('user')
-        location.reload(true)
-      }
+async function downloadUserChallenge(challengeId) {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader(),
+    responseType: 'application/octet-stream',
+  }
 
-      const error = (data && data.message) || response.statusText
-
-      return Promise.reject(error)
-    }
-
-    return data
-  })
+  return fetch(`${process.env.VUE_APP_API_URL}/user-challenge/${challengeId}`, requestOptions)
+    .then(handleDownloadResponse)
+    .then(response => {
+      console.log(response)
+      return response.blob().then(data => download(data, 'someFiles'))
+    })
 }

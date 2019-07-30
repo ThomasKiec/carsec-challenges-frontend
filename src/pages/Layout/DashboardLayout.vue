@@ -13,9 +13,9 @@
         <md-icon>content_paste</md-icon>
         <p>Challenges</p>
       </sidebar-link>
-      <sidebar-link to="/news">
-        <md-icon>notifications</md-icon>
-        <p>News</p>
+      <sidebar-link to="/scores">
+        <md-icon>trending_up</md-icon>
+        <p>Scores</p>
       </sidebar-link>
       <sidebar-link to="/logout" class="active-pro">
         <md-icon>power_settings_new</md-icon>

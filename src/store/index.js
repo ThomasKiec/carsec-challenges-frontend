@@ -7,6 +7,7 @@ import { challenges } from './user-challenges.module'
 import { hardwareKeys } from './hardware-keys.module'
 import { users } from './users.module'
 import { teams } from './teams.module'
+import { userKeys } from './user-keys.module'
 
 Vue.use(Vuex)
 
@@ -18,5 +19,6 @@ export const store = new Vuex.Store({
     hardwareKeys,
     users,
     teams,
+    userKeys,
   },
 })
