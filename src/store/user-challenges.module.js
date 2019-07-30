@@ -7,6 +7,7 @@ export const challenges = {
     solved: {},
     created: {},
     deleted: {},
+    downloaded: {},
   },
   actions: {
     getAllChallenges({ commit }) {
@@ -36,6 +37,13 @@ export const challenges = {
       challengesService
         .deleteChallenge(challengeId)
         .then(() => commit('deleteChallengeSuccess'), error => commit('deleteChallengeFailure', error))
+    },
+    downloadChallenge({ commit }, { challengeId }) {
+      commit('downloadChallengeRequest')
+
+      challengesService
+        .downloadUserChallenge(challengeId)
+        .then(() => commit('downloadChallengeSuccess'), error => commit('downloadChallengeFailure', error))
     },
   },
   mutations: {
@@ -74,6 +82,15 @@ export const challenges = {
     },
     deleteChallengeFailure(state, error) {
       state.deleted = { error: true, message: error }
+    },
+    downloadChallengeRequest(state) {
+      state.downloaded = { loading: true }
+    },
+    downloadChallengeSuccess(state) {
+      state.downloaded = { success: true }
+    },
+    downloadChallengeFailure(state, error) {
+      state.downloaded = { error: true, message: error }
     },
   },
 }
