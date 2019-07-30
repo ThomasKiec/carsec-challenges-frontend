@@ -1,10 +1,11 @@
 import { authHeader } from '../helpers/auth-header'
-import { handleResponse } from './middleware/handle-response'
+import { handleJSONResponse } from './middleware/handle-response'
 
 export const teamService = {
   getTeams,
   createTeam,
   deleteTeam,
+  getTeamScores,
 }
 
 async function getTeams() {
@@ -13,7 +14,7 @@ async function getTeams() {
     headers: authHeader(),
   }
 
-  return fetch(`${process.env.VUE_APP_API_URL}/teams`, requestOptions).then(handleResponse)
+  return fetch(`${process.env.VUE_APP_API_URL}/teams`, requestOptions).then(handleJSONResponse)
 }
 
 async function createTeam(name) {
@@ -28,7 +29,7 @@ async function createTeam(name) {
     }),
   }
 
-  return fetch(`${process.env.VUE_APP_API_URL}/teams`, requestOptions).then(handleResponse)
+  return fetch(`${process.env.VUE_APP_API_URL}/teams`, requestOptions).then(handleJSONResponse)
 }
 
 async function deleteTeam(teamId) {
@@ -37,5 +38,14 @@ async function deleteTeam(teamId) {
     headers: authHeader(),
   }
 
-  return fetch(`${process.env.VUE_APP_API_URL}/teams/${teamId}`, requestOptions).then(handleResponse)
+  return fetch(`${process.env.VUE_APP_API_URL}/teams/${teamId}`, requestOptions).then(handleJSONResponse)
+}
+
+async function getTeamScores() {
+  const requstOptions = {
+    method: 'GET',
+    headers: authHeader(),
+  }
+
+  return fetch(`${process.env.VUE_APP_API_URL}/teams/scores`, requstOptions).then(handleJSONResponse)
 }

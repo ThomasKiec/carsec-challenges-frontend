@@ -4,6 +4,7 @@ export const teams = {
   namespaced: true,
   state: {
     items: {},
+    scores: {},
     created: {},
     deleted: {},
   },
@@ -24,6 +25,16 @@ export const teams = {
       teamService
         .deleteTeam(teamId)
         .then(() => commit('deleteTeamSuccess'), error => commit('deleteTeamFailure', error))
+    },
+    getTeamScores({ commit }) {
+      commit('getTeamScoresRequest')
+
+      teamService
+        .getTeamScores()
+        .then(
+          teamsScores => commit('getTeamScoresSuccess', teamsScores),
+          error => commit('getTeamScoresFailure', error)
+        )
     },
   },
   mutations: {
@@ -53,6 +64,15 @@ export const teams = {
     },
     deleteTeamFailure(state, error) {
       state.deleted = { error: true, message: error }
+    },
+    getTeamScoresRequest(state) {
+      state.scores = { loading: true }
+    },
+    getTeamScoresSuccess(state, { teamScores }) {
+      state.scores = teamScores
+    },
+    getTeamScoresFailure(state, error) {
+      state.scores = { error: true, message: error }
     },
   },
 }
