@@ -17,7 +17,7 @@ async function getUsers() {
     headers: authHeader(),
   }
 
-  return fetch(`${process.env.VUE_APP_API_URL}/users`, requestOptions).then(handleJSONResponse)
+  return fetch(`/api/users`, requestOptions).then(handleJSONResponse)
 }
 
 async function createUser(email, teamId, role) {
@@ -34,20 +34,20 @@ async function createUser(email, teamId, role) {
     }),
   }
 
-  return fetch(`${process.env.VUE_APP_API_URL}/users/signup`, requestOptions).then(handleJSONResponse)
+  return fetch(`/api/users/signup`, requestOptions).then(handleJSONResponse)
 }
 
-async function changePassword(password) {
+async function changePassword(password, passwordCheck, oldPassword) {
   const requestOptions = {
     method: 'PUT',
     headers: {
       ...authHeader(),
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ password }),
+    body: JSON.stringify({ password, passwordCheck, oldPassword }),
   }
 
-  return fetch(`${process.env.VUE_APP_API_URL}/users/`, requestOptions).then(handleJSONResponse)
+  return fetch(`/api/users/`, requestOptions).then(handleJSONResponse)
 }
 
 async function resetPassword(userId) {
@@ -56,7 +56,7 @@ async function resetPassword(userId) {
     headers: authHeader(),
   }
 
-  return fetch(`${process.env.VUE_APP_API_URL}/users/reset/${userId}`, requestOptions).then(handleJSONResponse)
+  return fetch(`/api/users/reset/${userId}`, requestOptions).then(handleJSONResponse)
 }
 
 async function deleteUser(userIds) {
@@ -79,7 +79,7 @@ async function deleteUser(userIds) {
 
   console.log(queryParameters)
 
-  return fetch(`${process.env.VUE_APP_API_URL}/users${queryParameters}`, requestOptions).then(handleJSONResponse)
+  return fetch(`/api/users${queryParameters}`, requestOptions).then(handleJSONResponse)
 }
 
 async function login(email, password) {
@@ -92,7 +92,7 @@ async function login(email, password) {
     }),
   }
 
-  return fetch(`${process.env.VUE_APP_API_URL}/users/signin`, requestOptions)
+  return fetch(`/api/users/signin`, requestOptions)
     .then(handleJSONResponse)
     .then(user => {
       // login successful if there's a jwt token in the response

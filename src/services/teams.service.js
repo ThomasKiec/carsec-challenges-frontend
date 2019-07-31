@@ -14,7 +14,7 @@ async function getTeams() {
     headers: authHeader(),
   }
 
-  return fetch(`${process.env.VUE_APP_API_URL}/teams`, requestOptions).then(handleJSONResponse)
+  return fetch(`/api/teams`, requestOptions).then(handleJSONResponse)
 }
 
 async function createTeam(name) {
@@ -29,7 +29,7 @@ async function createTeam(name) {
     }),
   }
 
-  return fetch(`${process.env.VUE_APP_API_URL}/teams`, requestOptions).then(handleJSONResponse)
+  return fetch(`/api/teams`, requestOptions).then(handleJSONResponse)
 }
 
 async function deleteTeam(teamId) {
@@ -38,7 +38,7 @@ async function deleteTeam(teamId) {
     headers: authHeader(),
   }
 
-  return fetch(`${process.env.VUE_APP_API_URL}/teams/${teamId}`, requestOptions).then(handleJSONResponse)
+  return fetch(`/api/teams/${teamId}`, requestOptions).then(handleJSONResponse)
 }
 
 async function getTeamScores() {
@@ -47,5 +47,5 @@ async function getTeamScores() {
     headers: authHeader(),
   }
 
-  return fetch(`${process.env.VUE_APP_API_URL}/teams/scores`, requstOptions).then(handleJSONResponse)
+  return fetch(`/api/teams/scores`, requstOptions).then(handleJSONResponse)
 }

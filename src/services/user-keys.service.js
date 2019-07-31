@@ -13,7 +13,7 @@ async function getUserKeys() {
     headers: authHeader(),
   }
 
-  return fetch(`${process.env.VUE_APP_API_URL}/hardware-keys/user`, requestOptions).then(handleJSONResponse)
+  return fetch(`/api/hardware-keys/user`, requestOptions).then(handleJSONResponse)
 }
 
 async function updateUserKeys(userKeys) {
@@ -26,7 +26,7 @@ async function updateUserKeys(userKeys) {
     body: JSON.stringify({ userKeys }),
   }
 
-  return fetch(`${process.env.VUE_APP_API_URL}/hardware-keys/user`, requestOptions).then(handleJSONResponse)
+  return fetch(`/api/hardware-keys/user`, requestOptions).then(handleJSONResponse)
 }
 
 async function deleteUserKeyValues(userId) {
@@ -35,5 +35,5 @@ async function deleteUserKeyValues(userId) {
     headers: authHeader(),
   }
 
-  return fetch(`${process.env.VUE_APP_API_URL}/hardware-keys/user/${userId}`, requestOptions).then(handleJSONResponse)
+  return fetch(`/api/hardware-keys/user/${userId}`, requestOptions).then(handleJSONResponse)
 }

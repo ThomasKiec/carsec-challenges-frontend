@@ -29,11 +29,11 @@ export const users = {
         .resetPassword(userId)
         .then(() => commit('resetPasswordSuccess'), error => commit('resetPasswordFailure', error))
     },
-    changePassword({ commit }, { password }) {
+    changePassword({ commit }, { password, passwordCheck, oldPassword }) {
       commit('changePasswordRequest')
 
       userService
-        .changePassword(password)
+        .changePassword(password, passwordCheck, oldPassword)
         .then(() => commit('changePasswordSuccess'), error => commit('changePasswordFailure', error))
     },
     deleteUser({ commit }, { userIds }) {
@@ -89,6 +89,7 @@ export const users = {
     },
     deleteUserFailure(state, error) {
       state.deleted = { error: true, message: error }
+      process.env.PORT
     },
   },
 }

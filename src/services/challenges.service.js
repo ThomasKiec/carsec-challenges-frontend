@@ -16,7 +16,7 @@ async function getUserChallenges() {
     headers: authHeader(),
   }
 
-  return fetch(`${process.env.VUE_APP_API_URL}/challenges`, requestOptions)
+  return fetch(`/api/challenges`, requestOptions)
     .then(handleJSONResponse)
     .then(({ challenges }) => challenges)
 }
@@ -39,7 +39,7 @@ async function createChallenge(project, title, points, topic, buildCall, descrip
     }),
   }
 
-  return fetch(`${process.env.VUE_APP_API_URL}/challenges`, requestOptions).then(handleJSONResponse)
+  return fetch(`/api/challenges`, requestOptions).then(handleJSONResponse)
 }
 
 async function deleteChallenge(id) {
@@ -48,7 +48,7 @@ async function deleteChallenge(id) {
     headers: authHeader(),
   }
 
-  return fetch(`${process.env.VUE_APP_API_URL}/challenges/${id}`, requestOptions).then(handleJSONResponse)
+  return fetch(`/api/challenges/${id}`, requestOptions).then(handleJSONResponse)
 }
 
 async function solveUserChallenge(challengeId, result) {
@@ -57,9 +57,7 @@ async function solveUserChallenge(challengeId, result) {
     headers: authHeader(),
   }
 
-  return fetch(`${process.env.VUE_APP_API_URL}/user-challenge/solve/${challengeId}/${result}`, requestOptions).then(
-    handleJSONResponse
-  )
+  return fetch(`/api/user-challenge/solve/${challengeId}/${result}`, requestOptions).then(handleJSONResponse)
 }
 
 async function downloadUserChallenge(challengeId) {
@@ -69,7 +67,7 @@ async function downloadUserChallenge(challengeId) {
     responseType: 'application/octet-stream',
   }
 
-  return fetch(`${process.env.VUE_APP_API_URL}/user-challenge/${challengeId}`, requestOptions)
+  return fetch(`/api/user-challenge/${challengeId}`, requestOptions)
     .then(handleDownloadResponse)
     .then(response => {
       console.log(response)

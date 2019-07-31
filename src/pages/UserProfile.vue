@@ -9,12 +9,30 @@
           <md-dialog-content>
             <div class="md-layout-item md-small-size-100 md-size-100">
               <md-field>
-                <label for="password">Password</label>
+                <label for="oldPassword">Old password</label>
+                <md-input
+                  type="password"
+                  v-model="oldPassword"
+                  name="oldPassword"
+                  :class="{ 'is-invalid': !oldPassword}"
+                ></md-input>
+              </md-field>
+              <md-field>
+                <label for="password">New password</label>
                 <md-input
                   type="password"
                   v-model="password"
                   name="password"
                   :class="{ 'is-invalid': !password}"
+                ></md-input>
+              </md-field>
+              <md-field>
+                <label for="passwordCheck">Insert new password again</label>
+                <md-input
+                  type="password"
+                  v-model="passwordCheck"
+                  name="passwordCheck"
+                  :class="{ 'is-invalid': !passwordCheck}"
                 ></md-input>
               </md-field>
             </div>
@@ -24,15 +42,6 @@
             </div>
           </md-dialog-content>
         </md-dialog>
-        <!-- <md-dialog-prompt
-          :md-active.sync="showDialogChangePassword"
-          v-model="password"
-          md-title="Change Password"
-          md-input-placeholder="Type password..."
-          type="password"
-          md-confirm="Save"
-          @md-confirm="ChangePassword"
-        ></md-dialog-prompt>-->
       </div>
     </div>
     <md-dialog-alert
@@ -75,16 +84,18 @@ export default {
     return {
       showDialogChangePassword: false,
       password: null,
+      passwordCheck: null,
+      oldPassword: null,
     }
   },
   methods: {
     async changePassword() {
       const { dispatch } = this.$store
 
-      const password = this.$data.password
+      const { password, passwordCheck, oldPassword } = this.$data
 
       if (password) {
-        dispatch('users/changePassword', { password })
+        dispatch('users/changePassword', { password, passwordCheck, oldPassword })
       }
 
       await this.reloadPage()
@@ -93,6 +104,8 @@ export default {
     async reloadPage() {
       this.$store.state.users.changed = {}
       this.$data.password = null
+      this.$data.passwordCheck = null
+      this.$data.oldPassword = null
       this.showDialogChangePassword = false
 
       await this.$nextTick()
