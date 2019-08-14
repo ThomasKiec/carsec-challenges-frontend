@@ -89,7 +89,6 @@ export const users = {
     },
     deleteUserFailure(state, error) {
       state.deleted = { error: true, message: error }
-      process.env.PORT
     },
   },
 }

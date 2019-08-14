@@ -32,18 +32,25 @@
             <md-field>
               <label>Build Call</label>
               <md-input v-model="challengeForm.buildCall" maxlength="255"></md-input>
-              <span class="md-helper-text"
-                >Note: The hardware keys will be append to the build call in the selected order</span
-              >
+              <span
+                class="md-helper-text"
+              >Note: The hardware keys will be append to the build call in the selected order</span>
             </md-field>
           </div>
           <div class="md-layout-item md-small-size-100 md-size-100">
             <md-field>
               <label for="hardwareKeys">Hardware Keys</label>
-              <md-select v-model="selectedItem" name="selectedItem" id="selectedItem" @md-selected="addSelectedKey">
-                <md-option v-for="key in hardwareKeys" v-bind:key="key.id" v-bind:value="key.id">{{
+              <md-select
+                v-model="selectedItem"
+                name="selectedItem"
+                id="selectedItem"
+                @md-selected="addSelectedKey"
+              >
+                <md-option v-for="key in hardwareKeys" v-bind:key="key.id" v-bind:value="key.id">
+                  {{
                   key.name
-                }}</md-option>
+                  }}
+                </md-option>
               </md-select>
               <span class="md-helper-text">Choose hardware keys for challenge</span>
             </md-field>
@@ -55,11 +62,17 @@
               <md-icon>clear</md-icon>
               <md-tooltip md-direction="bottom">Remove last hardware key</md-tooltip>
             </md-button>
-            <md-button class="md-icon-button md-raised md-danger md-round" @click="clickDeleteHardwareKey">
+            <md-button
+              class="md-icon-button md-raised md-danger md-round"
+              @click="clickDeleteHardwareKey"
+            >
               <md-icon>remove</md-icon>
               <md-tooltip md-direction="bottom">Delete hardware key</md-tooltip>
             </md-button>
-            <md-button class="md-icon-button md-raised md-success md-round" @click="clickAddHardwareKey">
+            <md-button
+              class="md-icon-button md-raised md-success md-round"
+              @click="clickAddHardwareKey"
+            >
               <md-icon>add</md-icon>
               <md-tooltip md-direction="bottom">Create hardware key</md-tooltip>
             </md-button>
@@ -94,15 +107,21 @@
                     name="hardwareKeyForm.selected"
                     id="hardwareKeyForm.selected"
                   >
-                    <md-option v-for="key in hardwareKeys" v-bind:key="key.id" v-bind:value="key.id">{{
+                    <md-option
+                      v-for="key in hardwareKeys"
+                      v-bind:key="key.id"
+                      v-bind:value="key.id"
+                    >
+                      {{
                       key.name
-                    }}</md-option>
+                      }}
+                    </md-option>
                   </md-select>
                 </md-field>
               </div>
               <div class="md-layout-item md-size-100 text-right">
                 <md-button @click="showDialogDeleteHardwareKey = false" class="md-raised">Cancel</md-button>
-                <md-button @click="deleteHardwareKey" class="md-raised md-success">Delete</md-button>
+                <md-button @click="deleteHardwareKey" class="md-raised md-danger">Delete</md-button>
               </div>
             </md-dialog-content>
           </md-dialog>
@@ -126,7 +145,12 @@
       md-title="Hardware key deleted"
       md-content="The hardware key has been successfully deleted."
     />
-    <md-dialog-alert :md-active.sync="error" md-title="Error occured" :md-content="error.message" @click="reloadPage">
+    <md-dialog-alert
+      :md-active.sync="error"
+      md-title="Error occured"
+      :md-content="error.message"
+      @click="reloadPage"
+    >
       <label>{{ error.message }}</label>
     </md-dialog-alert>
     <div class="md-layout">
@@ -134,7 +158,6 @@
         <div v-if="challenges.loading">
           <md-progress-spinner md-mode="indeterminate"></md-progress-spinner>
         </div>
-        <span class="text-danger" v-if="challenges.error">ERROR:{{ challenges.error }}</span>
         <md-button @click="clickAddChallenge" v-if="role === 'admin'">
           <label>Add challenge</label>
         </md-button>
@@ -169,6 +192,9 @@ export default {
       hardwareKeyCreated: state => state.hardwareKeys.created,
       hardwareKeyDeleted: state => state.hardwareKeys.deleted,
       error: state => {
+        if (state.challenges.items.error) {
+          return state.challenges.items
+        }
         if (state.challenges.created.error) {
           return state.challenges.created
         }
@@ -311,6 +337,7 @@ export default {
       await this.$nextTick()
     },
     async reloadPage() {
+      this.$store.state.challenges.items = {}
       this.$store.state.challenges.created = {}
       this.$store.state.challenges.deleted = {}
       this.$store.state.hardwareKeys.created = {}

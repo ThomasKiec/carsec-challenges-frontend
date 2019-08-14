@@ -9,7 +9,7 @@
         </md-field>
       </div>
       <md-button @click="solveChallenge" class="md-raised md-success">Save</md-button>
-      <md-button @click="closeDialog" class="md-raised md-success">Close</md-button>
+      <md-button @click="closeDialog" class="md-raised">Close</md-button>
     </md-dialog>
     <md-dialog-alert
       :md-active.sync="deleted.success"
@@ -20,7 +20,7 @@
     <md-dialog-alert
       :md-active.sync="deleted.error"
       md-title="Challenge could not be deleted"
-      md-content="An error has occurred. The challenge could not be deleted. "
+      md-content="An error has occurred. The challenge could not be deleted."
       @click="reloadPage"
     />
     <md-dialog-alert

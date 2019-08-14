@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Welcome to ANSKO & EMSKO Hacking Challenges</h1>
+    <h1>Welcome to CARSEC IT-Security-Challenges</h1>
     <md-card display="inline-block">
       <md-card-header :data-background-color="dataBackgroundColor" md-color="green">
         <h4 class="title">Login</h4>
